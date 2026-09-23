@@ -1,0 +1,50 @@
+{
+  "name": "C# + Angular + Aspire DevContainer",
+  "image": "mcr.microsoft.com/devcontainers/base:ubuntu-22.04",
+
+  "features": {
+    // 1. Docker-in-Docker required for .NET Aspire to spin up container resources
+    "ghcr.io/devcontainers/features/docker-in-docker:1": {
+      "version": "latest",
+      "moby": true
+    },
+    // 2. .NET SDK for C# backend and YARP reverse proxy
+    "ghcr.io/devcontainers/features/dotnet:1": {
+      "version": "9.0"
+    },
+    // 3. Node.js for Angular frontend development
+    "ghcr.io/devcontainers/features/node:1": {
+      "version": "22",
+      "nodeGypDependencies": true
+    },
+    // 4. .NET Aspire CLI
+    "ghcr.io/devcontainers/features/dotnet-aspire:1": {}
+  },
+
+  "customizations": {
+    "vscode": {
+      "extensions": [
+        "ms-dotnettools.csdevkit",
+        "ms-dotnettools.csharp",
+        "Angular.ng-template",
+        "ms-azuretools.vscode-docker",
+        "esbenp.prettier-vscode"
+      ],
+      "settings": {
+        "terminal.integrated.profiles.linux": {
+          "bash": {
+            "path": "/bin/bash"
+          }
+        }
+      }
+    }
+  },
+
+  // Forward common development ports (Aspire Dashboard, Angular, API, YARP)
+  "forwardPorts": [18888, 4200, 5000, 5001, 8080],
+
+  // Install Angular CLI and set up .NET HTTPS dev certs
+  "postCreateCommand": "npm install -g @angular/cli && dotnet dev-certs https --trust",
+
+  "remoteUser": "vscode"
+}
